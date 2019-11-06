@@ -14,7 +14,7 @@ Install all dependencies
 npm install
 ```
 
-#### Run webpack-dev-server
+### Run webpack-dev-server
 
 ```
 npm start
