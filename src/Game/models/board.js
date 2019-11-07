@@ -1,6 +1,5 @@
 import Cat from "../pieces/cat";
-
-// klasa inicjująca tablicę, gdzie będą zapisywane pozycje bierek
+import Pawn from "../pieces/pawn";
 
 export default class Board extends Array {
 
@@ -11,11 +10,13 @@ export default class Board extends Array {
   }
 
   // tutaj tworzycie nowe obiekty waszych bierek i od razu umieszczacie je na szachownicy
-  createAndSetCats(side) {
-    const row = side === "white" ? 5 : 2;
-    this[row][0] = new Cat(row, 0, side);
-    this[row][5] = new Cat(row, 5, side);
+  createAndSetPawns(side){
+    const row = side === "white" ? 6 : 1;
+    for(let i = 0; i < 8; i++ ){
+      this[row][i] = new Pawn(row, i, side);
+    }
   }
+
 
   // metoda inicjalizująca
 
@@ -25,7 +26,7 @@ export default class Board extends Array {
     const colors = ["white", "black"];
 
     for (let i = 0; i < colors.length; i++) {
-      this.createAndSetCats(colors[i]);
+      this.createAndSetPawns(colors[i]);
     }
   }
 }
