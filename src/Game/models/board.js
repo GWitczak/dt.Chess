@@ -1,5 +1,6 @@
 import Cat from "../pieces/cat";
 import Pawn from "../pieces/pawn";
+import Bishop from "../pieces/bishop";
 
 export default class Board extends Array {
 
@@ -15,6 +16,9 @@ export default class Board extends Array {
     for(let i = 0; i < 8; i++ ){
       this[row][i] = new Pawn(row, i, side);
     }
+    const row2 = side === "white" ? 7 : 0;
+    this[row2][2] = new Bishop(row2, 2, side);
+    this[row2][5] = new Bishop(row2, 5, side);
   }
 
 
