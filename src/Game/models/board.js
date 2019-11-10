@@ -1,5 +1,6 @@
 import Cat from "../pieces/cat";
 import Pawn from "../pieces/pawn";
+import Queen from "../pieces/queen";
 import Knight from "../pieces/knight";
 
 export default class Board extends Array {
@@ -16,6 +17,11 @@ export default class Board extends Array {
     for(let i = 0; i < 8; i++ ){
       this[row][i] = new Pawn(row, i, side);
     }
+  }
+  
+  createAndSetQueen(side){
+    const row = side === "white" ? 7 : 0;
+    this[row][3] = new Queen(row, 3, side);
   }
 
   createAndSetKnights(side){
@@ -34,6 +40,7 @@ export default class Board extends Array {
 
     for (let i = 0; i < colors.length; i++) {
       this.createAndSetPawns(colors[i]);
+      this.createAndSetQueen(colors[i]);
       this.createAndSetKnights(colors[i]);
     }
   }
