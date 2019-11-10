@@ -21,7 +21,7 @@ export default class Board extends Array {
   createAndSetBishop(side) {
     const row = side === "white" ? 7 : 0;
     this[row][2] = new Bishop(row, 2, side);
-    this[row][5] = new Bishop(row2 5, side);
+    this[row][5] = new Bishop(row, 5, side);
   }
 
 
