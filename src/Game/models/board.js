@@ -34,6 +34,7 @@ export default class Board extends Array {
 
     for (let i = 0; i < colors.length; i++) {
       this.createAndSetPawns(colors[i]);
+      this.createAndSetBishop(colors[i]);
     }
   }
 }
