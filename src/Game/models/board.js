@@ -3,6 +3,7 @@ import Pawn from "../pieces/pawn";
 import Bishop from "../pieces/bishop";
 import Queen from "../pieces/queen";
 import Knight from "../pieces/knight";
+import Rook from "../pieces/rook";
 
 
 export default class Board extends Array {
@@ -38,6 +39,12 @@ export default class Board extends Array {
     this[row][5] = new Bishop(row, 5, side);
   }
 
+  createAndSetRooks(side) {
+    const row = side === "white" ? 7 : 0;
+    this[row][0] = new Rook(row, 0, side);
+    this[row][7] = new Rook(row, 7, side);
+  }
+
 
   // metoda inicjalizująca
 
@@ -51,6 +58,7 @@ export default class Board extends Array {
       this.createAndSetBishop(colors[i]);
       this.createAndSetQueen(colors[i]);
       this.createAndSetKnights(colors[i]);
+      this.createAndSetRooks(colors[i]);
     }
   }
 }
