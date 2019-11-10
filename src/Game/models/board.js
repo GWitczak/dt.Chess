@@ -1,4 +1,3 @@
-import Cat from "../pieces/cat";
 import Pawn from "../pieces/pawn";
 import Bishop from "../pieces/bishop";
 import Queen from "../pieces/queen";
