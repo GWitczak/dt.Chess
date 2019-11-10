@@ -9,12 +9,6 @@ class Bishop extends Piece {
     this._vector = this._side == "white" ? -1 : 1; // 1 to góra -1 to dół
   }
 
-  /* Chyba niepotrzebne?
-    // Filtrowanie ruchów wykraczających poza szachownice
-    filterOutBoardMoves(possibleMoves) {
-      // DIY 
-    }*/
-
     filterObstacles(possibleMoves, board) {
       let allowedMoves = JSON.parse(JSON.stringify(possibleMoves)); // deep copy
       for (let i = 0; i < possibleMoves.length; i++) {
@@ -113,14 +107,3 @@ class Bishop extends Piece {
 }
 
 export default Bishop;
-
-
-/* 
-board.js => 
-  import Bishop from "../pieces/bishop";
-  
-  
-  createAndSetCats(side) {
-    const row = side === "white" ? 7 : 0;
-    this[row][2] = new Bishop(row, 2, side);
-    this[row][5] = new Bishop(row, 5, side);*/
