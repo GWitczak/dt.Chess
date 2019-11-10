@@ -20,10 +20,6 @@ export default class Board extends Array {
   
   createAndSetQueen(side){
     const row = side === "white" ? 7 : 0;
-    const rowOffset = side === "white" ? -1 : 1;
-    for(let i = 0; i < 8; i++ ){
-      this[row+rowOffset][i] = new Pawn(row, i, side);
-    }
     this[row][3] = new Queen(row, 3, side);
   }
 
@@ -37,6 +33,7 @@ export default class Board extends Array {
 
     for (let i = 0; i < colors.length; i++) {
       this.createAndSetPawns(colors[i]);
+      this.createAndSetQueen(colors[i]);
     }
   }
 }
