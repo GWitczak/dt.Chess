@@ -29,9 +29,18 @@ export default class BoardView {
         });
     }
 
-    // tutaj rowniez musimy napisac funkcje movePiece(positionStart, figure)
-    //    - czysci stare pole (ustawia innerHTML na '' w positionStart)
-    //    - ustawia figure przypisuje odpowiedniej kratki inner html na figure.display (markup danej figury)
+    movePiece(positionStart, figure) {
+        // Reset old possition
+        this._boardElement.querySelector(
+            `[data-id="${positionStart[0]}-${positionStart[1]}"]`
+        ).innerHTML = `${positionStart[0]}, ${positionStart[1]}`;
+        // Set piece on new possition
+        const x = figure._x;
+        const y = figure._y;
+        this._boardElement.querySelector(
+            `[data-id="${x}-${y}"]`
+        ).innerHTML = figure.display;
+    }
 
     init(board) {
         this._createSquares(board);
