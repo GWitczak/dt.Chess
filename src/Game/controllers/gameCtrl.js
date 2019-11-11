@@ -6,6 +6,7 @@ export default class GameCtrl {
     this._markedFigure = null;
   }
 
+  
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
       const squarePosition = ev.target
@@ -18,35 +19,114 @@ export default class GameCtrl {
     });
   }
 
+  _handleMark(boardElement) {
+    console.log('Marked: ' + boardElement.name);
+    // Set new piece as marked
+    this._markedFigure = boardElement;
+    // TODO: highlight possible moves
+  }
+
+  _handleAttack(enemyPossition) {
+    console.log('Attack possition: ' + enemyPossition[0] + ',' + enemyPossition[1]);
+    if (this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), enemyPossition)) {
+      this._handleMove(enemyPossition);
+      // TODO: set enemy's turn 
+    } else {
+      this._clearState
+    }
+    
+  }
+
+  _handleMove(newPossition) {
+    console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition);
+    // start possition
+    let startPossition = [this._markedFigure._x, this._markedFigure._y];
+    // update board model 
+    this._markedFigure.movePiece(newPossition, this._boardModel);
+    // update board view
+    this._boardView.movePiece(startPossition, this._markedFigure);
+    // TODO: set enemy's turn
+
+    this._clearState();
+  }
+
+  _clearState() {
+    console.log('Clear state!');
+    this._markedFigure = null;
+    // TODO: clear highlight
+  }
+
+  _moveIsPossible(moves, target) {
+    for (let i = 0; i < moves.length; i++) {
+      if (moves[i][0] == target[0] && moves[i][1] == target[1]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
 
+    // Clicked element
     const boardElement = this._boardModel[x][y] || null;
 
-    // tutaj trzeba napisać logikę ruchu
-
-    // jeśli klik na figurze i nie mamy zaznaczonej żadnej figury to wywołujemy funkcję która zaznaczy nam klikniętą figurę np this._handleMark(boardElement)
-    //    - przypisuje nam figure do this._markedFigure
-    //    - podświetla nam ruchy danej figury na szachownicy
-
-    // jeśli mamy zaznaczoną figurę i klik na pustą kratkę (gotBoardElement == false) to wywołujemy funkcję np. this._handleMove(position)
-    //    - sprawdzamy czy klikniete pole jest w dostepnych ruchach jesli nie odznacza figure
-    //    - rusza figure 
-    //      - aktualizuje model (wywoluje funkcje move na _markedFigure)
-    //      - aktualizuje widok (wywoluje funkcje movePiece na _markedFigure)
-    //      - wywolanie jakiejs funkcji typu afterMoveOrAttack która np zmienia nam kolej gracza (tury) itp.
-
-    // Zaznaczona figura / kliknieta figura przeciwna - atak - wywołujemy np this._handleAttack(position)
-
-    // w każdym innym przypadku coś co wyczyści nam state np this._clearState() - ustawia _markedFigure na null, usuwa podswietlenia szachownicy z widoku
-
-    boardElement ? this._getMoves(boardElement) : null;
+    if (this._markedFigure != null) {
+      // We have marked figure
+      if (boardElement != null) {
+        // We clicked on figure
+        if (this._markedFigure._side == boardElement._side) {
+          // and it is our figure
+          // TODO: should check for castling here
+          if (false) {
+            // Castling is avaible
+            // TODO: Castling
+          } else {
+            // Castling isn't avaible
+            // so we cant mark new figure
+            this._clearState();
+            this._handleMark(boardElement);
+          }
+        } else {
+          // and it is enemy's figure
+          this._handleAttack([x, y]);
+        }
+      } else {
+        // We clicked on empty field
+        // TODO: check if it is avaible field
+        if (this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), [x, y])) {
+          // Move is possible
+          this._handleMove([x, y]);
+        } else {
+          // We can't move here
+          this._clearState();
+        }
+      }
+    } else {
+      // We don't have marked figure
+      if (boardElement != null) {
+        // We clicked on figure
+        // TODO: here we should check if it is our figure 
+        if (true) {
+          // It is our figure so we can mark it
+          this._handleMark(boardElement);
+        } else {
+          // It is enemy figure so we clear state
+          this._clearState();
+        }
+      } else {
+        // We clicked on empty field
+        // so we clear state
+        this._clearState();
+      }
+    }
+    //boardElement ? this._getMoves(boardElement) : null;
   }
 
   _getMoves(figure) {
     const moves = figure.findLegalMoves(this._boardModel);
-    console.log(moves);
+    //console.log(moves);
     return moves;
   }
 
