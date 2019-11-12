@@ -85,9 +85,9 @@ class Queen extends Piece {
     this.filterMoves(backMoves, board);
     this.filterMoves(leftMoves, board);
     this.filterMoves(rightMoves, board);
-    const allMoves = topLeftMoves.concat(topRightMoves, bottomRightMoves, bottomLeftMoves,
+    const legalMoves = topLeftMoves.concat(topRightMoves, bottomRightMoves, bottomLeftMoves,
                                          frontMoves, backMoves, leftMoves, rightMoves);
-    return allMoves;
+    return legalMoves;
   }
 }
 export default Queen;
