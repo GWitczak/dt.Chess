@@ -22,7 +22,10 @@ class Rook extends Piece {
             y = possibleMoves[i][1];
     
             if (board[x][y]) {
-                possibleMoves.splice(i);
+                if (board[x][y]._side === this._side)
+                    possibleMoves.splice(i);
+                else
+                    possibleMoves.splice(i+1);
             }
         }
         return possibleMoves;
