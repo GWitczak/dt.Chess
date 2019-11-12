@@ -121,12 +121,12 @@ export default class GameCtrl {
         this._clearState();
       }
     }
-    //boardElement ? this._getMoves(boardElement) : null;
+    // boardElement ? this._getMoves(boardElement) : null; 
   }
 
   _getMoves(figure) {
     const moves = figure.findLegalMoves(this._boardModel);
-    //console.log(moves);
+    // console.log(moves); 
     return moves;
   }
 
