@@ -1,4 +1,5 @@
 import Piece from "./piece";
+import PawnPromotion from "./pawnPromotion";
 
 class Pawn extends Piece {
   constructor(x, y, side) {
@@ -54,6 +55,13 @@ class Pawn extends Piece {
     return Pawn.filterOccupiedPossition(Pawn.filterOutBoardMoves(result), board).concat(this.findLegalAttacks(board));
   }
 
+  // pawn promotion
+  movePiece(newPosition, board) {
+    super.movePiece(newPosition, board);
+    if ( (this._side == "white" && this._x == 0) || (this._side == "black" && this._x == 7) ) {
+      new PawnPromotion(this._x, this._y, this._side, board)
+    }
+  }
 }
 
 export default Pawn;

@@ -1,11 +1,12 @@
 :root {
-    --white: rgb(188, 228, 235);
-    --black: rgba(34, 33, 122, 0.747);
+    --white: rgb(224, 211, 199);
+    --black: rgb(114, 76, 45);
     --highlighted: rgb(255, 255, 0);
     --marked: rgb(255, 208, 0);
     --attacks: rgba(200, 100, 100, 0.966);
     --white-figures: rgba(255, 255, 255);
     --black-figures: rgb(0, 0, 0);
+    --pawn-promotion-div: rgb(146, 109, 78);
 }
 
 html {
@@ -15,7 +16,11 @@ html {
 }
 
 body {
-    background-color: rgb(183, 198, 202);
+    background-image: url("bg.jpg");
+    background-repeat: repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
 }
 
 .wrap {
@@ -35,6 +40,7 @@ body {
     grid-template-columns: repeat(8, 1fr);
     min-width: 80vh;
     min-height: 80vh;
+    border: 3px solid black;
 }
 
 .square {
@@ -44,7 +50,8 @@ body {
     max-width: 100%;
     height: auto;
     text-align: center;
-    line-height: 10vh;
+    /* line-height: 10vh; */
+    vertical-align: 10vh;
     font-size: 2vh;
     cursor: pointer;
     background-color: var(--white);
@@ -79,6 +86,53 @@ body {
     color: var(--white-figures);
 }
 
+.pawn-promotion-cover {
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top: (50%-40vh);
+    left: (50%-40vh);
+
+    background:rgba(255,255,255,0.5);
+    min-width: 80vh;
+    min-height: 80vh;
+}
+
+.pawn-promotion-div {
+    position: fixed;
+    padding:0;
+    margin:0;
+
+    width: 60vh;
+    height: 30vh;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+    border: 3px solid black;
+    background-color: var(--pawn-promotion-div);
+}
+
+.pawn-promotion-icons {
+    
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.pawn-promotion-icons {
+    font-size: 7vh;
+}
+
+.pawn-promotion-text {
+    font-size: 5vh;
+}
+
+.break {
+    flex-basis: 100%;
+  }
+
 @media (max-width: 720px) {
 
     .board {
@@ -88,6 +142,16 @@ body {
 
     .wrap {
         height: 90vh;
+    }
+
+    .pawn-promotion-cover {
+        min-width: 70vh;
+        min-height: 70vh;
+    }
+
+    .pawn-promotion-div {
+        width: 53vh;
+        height: 26.5vh;
     }
 }
 
@@ -104,6 +168,24 @@ body {
 
     .wrap {
         height: 70vh;
+    }
+
+    .pawn-promotion-cover {
+        min-width: 50vh;
+        min-height: 50vh;
+    }
+
+    .pawn-promotion-div {
+        width: 38vh;
+        height: 19vh;
+    }
+
+    .pawn-promotion-icons {
+        font-size: 5vh;
+    }
+    
+    .pawn-promotion-text {
+        font-size: 3vh;
     }
 
 }
@@ -123,6 +205,23 @@ body {
         height: 60vh;
     }
 
+    .pawn-promotion-cover {
+        min-width: 40vh;
+        min-height: 40vh;
+    }
+
+    .pawn-promotion-div {
+        width: 30vh;
+        height: 15vh;
+    }
+
+    .pawn-promotion-icons {
+        font-size: 4.5vh;
+    }
+    
+    .pawn-promotion-text {
+        font-size: 2vh;
+    }
 }
 
 @media (max-width: 350px) {
@@ -140,6 +239,24 @@ body {
         height: 50vh;
     }
 
+    .pawn-promotion-cover {
+        min-width: 35vh;
+        min-height: 35vh;
+    }
+
+    .pawn-promotion-div {
+        width: 26vh;
+        height: 13vh;
+    }
+
+    .pawn-promotion-icons {
+        font-size: 3.5vh;
+    }
+    
+    .pawn-promotion-text {
+        font-size: 1.8vh;
+    }
+
 }
 
 @media (max-width: 250px) {
@@ -147,6 +264,8 @@ body {
     .board {
         min-width: 25vh;
         min-height: 25vh;
+        max-width: 25vh;
+        max-height: 25vh;
     }
 
     .square .fas {
@@ -155,6 +274,24 @@ body {
 
     .wrap {
         height: 40vh;
+    }
+
+    .pawn-promotion-cover {
+        min-width: 25vh;
+        min-height: 25vh;
+    }
+
+    .pawn-promotion-div {
+        width: 18vh;
+        height: 9vh;
+    }
+
+    .pawn-promotion-icons {
+        font-size: 2.5vh;
+    }
+    
+    .pawn-promotion-text {
+        font-size: 1.4vh;
     }
 
 }
