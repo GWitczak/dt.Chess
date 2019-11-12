@@ -23,7 +23,8 @@ export default class GameCtrl {
     console.log('Marked: ' + boardElement.name);
     // Set new piece as marked
     this._markedFigure = boardElement;
-    // TODO: highlight possible moves
+    // Highlight possible moves
+    this._displayMoves(boardElement);
   }
 
   _handleAttack(enemyPossition) {
@@ -53,7 +54,14 @@ export default class GameCtrl {
   _clearState() {
     console.log('Clear state!');
     this._markedFigure = null;
-    // TODO: clear highlight
+
+    // Clear highlight
+    let highlighted = document.querySelectorAll(".highlighted")
+    for (let i = 0; i < highlighted.length; i++) {
+      highlighted[i].classList.remove("highlighted");
+    }
+
+
   }
 
   _moveIsPossible(moves, target) {
@@ -128,6 +136,14 @@ export default class GameCtrl {
     const moves = figure.findLegalMoves(this._boardModel);
     // console.log(moves); 
     return moves;
+  }
+
+  _displayMoves(figure) {
+    const moves = this._getMoves(figure);
+    for (let i=0; i < moves.length; i++) {
+      let position = moves[i];
+      document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("highlighted");
+    }
   }
 
   init() {
