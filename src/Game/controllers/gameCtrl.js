@@ -77,6 +77,54 @@ export default class GameCtrl {
     return false;
   }
 
+  _checkCastling(boardElement) {
+    if (this._markedFigure.name == "rook" && boardElement.name == "king" ||
+        this._markedFigure.name == "king" && boardElement.name == "rook") {
+      if (this._markedFigure.pristine == true && boardElement.pristine == true) { // check if pieces were moved
+        const rook = this._markedFigure.name == "rook" ? this._markedFigure : boardElement;
+        let row = rook._x;
+        if (rook._y == 0){ // check if any pieces are between king and rook
+          if (this._boardModel[row][1] == null && this._boardModel[row][2] == null &&
+              this._boardModel[row][3] == null){
+            return true;
+          } else {
+            return false
+          }
+        } else {
+          if (this._boardModel[row][5] == null && this._boardModel[row][6] == null) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  _performCastling(boardElement) {
+    const rook = this._markedFigure.name == "rook" ? this._markedFigure : boardElement;
+    const king = this._markedFigure.name == "king" ? this._markedFigure : boardElement;
+    let row = rook._x;
+    if (rook._y == 0) {
+      this._clearState(); //we know that castling is available and it doesn't matter which figure was clicked first
+      this._markedFigure = rook;
+      this._handleMove([row, 3]);
+      this._markedFigure = king;
+      this._handleMove([row, 2]);
+    } else {
+        this._clearState();
+        this._markedFigure = rook;
+        this._handleMove([row, 5]);
+        this._markedFigure = king;
+        this._handleMove([row, 6]);
+    }
+    this._switchTurn();
+  }
+
   _controllClick(position) {
     const x = position[0];
     const y = position[1];
@@ -89,9 +137,9 @@ export default class GameCtrl {
       case (this._markedFigure != null &&
         boardElement != null &&
         this._markedFigure._side == boardElement._side &&
-        false /*check for castling here*/ ):
+        this._checkCastling(boardElement)):
         console.log('Castling...');
-        // TODO: Castling
+        this._performCastling(boardElement);
         break;
 
         /* Marking new figure*/
@@ -133,8 +181,6 @@ export default class GameCtrl {
         this._clearState();
         break;
     }
-
-    // boardElement ? this._getMoves(boardElement) : null; 
   }
 
   _getMoves(figure) {
@@ -154,7 +200,6 @@ export default class GameCtrl {
   init() {
     console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
 
-    this._whoseTurn = "white";
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();

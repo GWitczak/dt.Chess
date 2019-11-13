@@ -8,6 +8,10 @@ class Piece {
     this._side = side; // 'black' or 'white'
   }
 
+  get pristine() {
+    return this._pristine;
+  }
+
   movePiece(newPosition, board) {
     // Mark figure as moved
     this._pristine = false;
