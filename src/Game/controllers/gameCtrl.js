@@ -5,7 +5,6 @@ export default class GameCtrl {
     this._boardView = new BoardView(this._boardContainer);
     this._markedFigure = null;
   }
-
   
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
@@ -19,23 +18,29 @@ export default class GameCtrl {
     });
   }
 
+  _switchTurn() {
+    this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white";
+  }
+
   _handleMark(boardElement) {
-    console.log('Marked: ' + boardElement.name);
+    // Set new piece as marked
+    this._markedFigure = boardElement;
+    if (this._markedFigure._side === this._whoseTurn){
+      console.log('Marked: ' + boardElement.name);
     // Set new piece as marked
     this._markedFigure = boardElement;
     // Highlight possible moves
     this._displayMoves(boardElement);
+    }
   }
 
   _handleAttack(enemyPossition) {
     console.log('Attack possition: ' + enemyPossition[0] + ',' + enemyPossition[1]);
     if (this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), enemyPossition)) {
-      this._handleMove(enemyPossition);
-      // TODO: set enemy's turn 
+      this._handleMove(enemyPossition); //wywołanie this._handleMove zmienia kolejkę
     } else {
       this._clearState
     }
-    
   }
 
   _handleMove(newPossition) {
@@ -47,7 +52,8 @@ export default class GameCtrl {
     // update board view
     this._boardView.movePiece(startPossition, this._markedFigure);
     // TODO: set enemy's turn
-
+    this._switchTurn();
+    console.log(`${this._whoseTurn}'s turn!`);
     this._clearState();
   }
 
@@ -60,8 +66,6 @@ export default class GameCtrl {
     for (let i = 0; i < highlighted.length; i++) {
       highlighted[i].classList.remove("highlighted");
     }
-
-
   }
 
   _moveIsPossible(moves, target) {
@@ -80,7 +84,7 @@ export default class GameCtrl {
     // Clicked element
     const boardElement = this._boardModel[x][y] || null;
 
-    if (this._markedFigure != null) {
+    if ((this._markedFigure != null) && (this._markedFigure._side === this._whoseTurn)) {
       // We have marked figure
       if (boardElement != null) {
         // We clicked on figure
@@ -147,8 +151,9 @@ export default class GameCtrl {
   }
 
   init() {
-    console.log("Inicjalizacja controllera...");
+    console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
 
+    this._whoseTurn = "white";
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
