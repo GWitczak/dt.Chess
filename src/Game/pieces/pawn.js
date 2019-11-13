@@ -34,7 +34,7 @@ class Pawn extends Piece {
   }
 
   findLegalMoves(board) {
-    console.log(board);
+    //console.log(board);
     const x = this._x; // row
     const y = this._y; // column
     const v = this._vector // up/down

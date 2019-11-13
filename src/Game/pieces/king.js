@@ -36,7 +36,7 @@ class King extends Piece {
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
   findLegalMoves(board) {
-    console.log(board);
+    //console.log(board);
 
     // Król może poruszać się o 1 w dowolną ze stron na w linii prostej oraz po skosie
 
