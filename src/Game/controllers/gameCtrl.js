@@ -98,7 +98,7 @@ export default class GameCtrl {
       case (this._markedFigure != null &&
         boardElement != null &&
         this._markedFigure._side == boardElement._side):
-        console.log('Marking new figure...2');
+        console.log('Marking new figure...');
 
         this._clearState();
         this._handleMark(boardElement);
@@ -124,7 +124,7 @@ export default class GameCtrl {
       case (this._markedFigure == null &&
         boardElement != null &&
         true && this._whoseTurn === boardElement._side /* Check here if it is our figure*/ ):
-        console.log('Marking new figure...2');
+        console.log('Marking new figure...');
         this._handleMark(boardElement);
         break;
 
