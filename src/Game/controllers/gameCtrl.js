@@ -5,7 +5,7 @@ export default class GameCtrl {
     this._boardView = new BoardView(this._boardContainer);
     this._markedFigure = null;
   }
-  
+
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
       const squarePosition = ev.target
@@ -27,38 +27,36 @@ export default class GameCtrl {
     this._markedFigure = boardElement;
     if (this._markedFigure._side === this._whoseTurn){
       console.log('Marked: ' + boardElement.name);
-    // Set new piece as marked
-    this._markedFigure = boardElement;
-    // Highlight possible moves
-    this._displayMoves(boardElement);
+      this._displayMoves(boardElement);
     }
   }
 
   _handleAttack(enemyPossition) {
-    console.log('Attack possition: ' + enemyPossition[0] + ',' + enemyPossition[1]);
     if (this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), enemyPossition)) {
       this._handleMove(enemyPossition); //wywołanie this._handleMove zmienia kolejkę
+      console.log('Attack possition: ' + enemyPossition[0] + ',' + enemyPossition[1]);
     } else {
-      this._clearState
+      console.log('Damn! '+ this._markedFigure.name +' can not attack: ' + enemyPossition[0] + ',' + enemyPossition[1]);
+      this._clearState();
     }
   }
 
   _handleMove(newPossition) {
-    console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition);
     // start possition
     let startPossition = [this._markedFigure._x, this._markedFigure._y];
     // update board model 
     this._markedFigure.movePiece(newPossition, this._boardModel);
     // update board view
     this._boardView.movePiece(startPossition, this._markedFigure);
-    // TODO: set enemy's turn
+    console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition[0] + ', ' + newPossition[1]);
+    
     this._switchTurn();
     console.log(`${this._whoseTurn}'s turn!`);
+    
     this._clearState();
   }
 
   _clearState() {
-    console.log('Clear state!');
     this._markedFigure = null;
 
     // Clear highlight
@@ -66,6 +64,7 @@ export default class GameCtrl {
     for (let i = 0; i < highlighted.length; i++) {
       highlighted[i].classList.remove("highlighted");
     }
+    console.log('Clear state!');
   }
 
   _moveIsPossible(moves, target) {
@@ -82,57 +81,58 @@ export default class GameCtrl {
     const y = position[1];
 
     // Clicked element
-    const boardElement = this._boardModel[x][y] || null;
+    const boardElement = this._boardModel[x][y] || null
 
-    if ((this._markedFigure != null) && (this._markedFigure._side === this._whoseTurn)) {
-      // We have marked figure
-      if (boardElement != null) {
-        // We clicked on figure
-        if (this._markedFigure._side == boardElement._side) {
-          // and it is our figure
-          // TODO: should check for castling here
-          if (false) {
-            // Castling is avaible
-            // TODO: Castling
-          } else {
-            // Castling isn't avaible
-            // so we cant mark new figure
-            this._clearState();
-            this._handleMark(boardElement);
-          }
-        } else {
-          // and it is enemy's figure
-          this._handleAttack([x, y]);
-        }
-      } else {
-        // We clicked on empty field
-        // TODO: check if it is avaible field
-        if (this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), [x, y])) {
-          // Move is possible
-          this._handleMove([x, y]);
-        } else {
-          // We can't move here
-          this._clearState();
-        }
-      }
-    } else {
-      // We don't have marked figure
-      if (boardElement != null) {
-        // We clicked on figure
-        // TODO: here we should check if it is our figure 
-        if (true) {
-          // It is our figure so we can mark it
-          this._handleMark(boardElement);
-        } else {
-          // It is enemy figure so we clear state
-          this._clearState();
-        }
-      } else {
-        // We clicked on empty field
-        // so we clear state
+    switch (true) {
+      /* Castling */
+      case (this._markedFigure != null &&
+        boardElement != null &&
+        this._markedFigure._side == boardElement._side &&
+        false /*check for castling here*/ ):
+        console.log('Castling...');
+        // TODO: Castling
+        break;
+
+        /* Marking new figure*/
+      case (this._markedFigure != null &&
+        boardElement != null &&
+        this._markedFigure._side == boardElement._side):
+        console.log('Marking new figure...');
+
         this._clearState();
-      }
+        this._handleMark(boardElement);
+        break;
+
+        /* Attack */
+      case (this._markedFigure != null &&
+        boardElement != null &&
+        this._markedFigure._side != boardElement._side):
+        console.log('Attacking...');
+        this._handleAttack([x, y]);
+        break;
+
+        /* Moving */
+      case (this._markedFigure != null &&
+        boardElement == null &&
+        this._moveIsPossible(this._markedFigure.findLegalMoves(this._boardModel), [x, y])):
+        console.log('Moving...');
+        this._handleMove([x, y]);
+        break;
+
+        /* Mark figure */
+      case (this._markedFigure == null &&
+        boardElement != null &&
+        true /* Check here if it is our figure*/ ):
+        console.log('Marking new figure...');
+        this._handleMark(boardElement);
+        break;
+
+      default:
+        console.log('Another action. Clearing state...');
+        this._clearState();
+        break;
     }
+
     // boardElement ? this._getMoves(boardElement) : null; 
   }
 
@@ -144,7 +144,7 @@ export default class GameCtrl {
 
   _displayMoves(figure) {
     const moves = this._getMoves(figure);
-    for (let i=0; i < moves.length; i++) {
+    for (let i = 0; i < moves.length; i++) {
       let position = moves[i];
       document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("highlighted");
     }
