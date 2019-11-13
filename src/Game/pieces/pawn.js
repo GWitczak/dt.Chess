@@ -30,7 +30,7 @@ class Pawn extends Piece {
     // return only attacks on enemy pieces
     return attacks.filter((move) =>
       board[move[0]][move[1]] != undefined &&
-      (board[move[0]][move[1]])._side != this.side);
+      (board[move[0]][move[1]])._side != this._side);
   }
 
   findLegalMoves(board) {
