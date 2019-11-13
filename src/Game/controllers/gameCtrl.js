@@ -74,11 +74,12 @@ export default class GameCtrl {
   _checkCastling(boardElement) {
     if (this._markedFigure.name == "rook" && boardElement.name == "king" ||
         this._markedFigure.name == "king" && boardElement.name == "rook") {
-      if (this._markedFigure.pristine == true && boardElement.pristine == true) { // if moved
+      if (this._markedFigure.pristine == true && boardElement.pristine == true) { // check if pieces were moved
         const rook = this._markedFigure.name == "rook" ? this._markedFigure : boardElement;
         let row = rook._x;
-        if (rook._y == 0){
-          if (this._boardModel[row][1] == null && this._boardModel[row][2] == null && this._boardModel[row][3] == null){
+        if (rook._y == 0){ // check if any pieces are between king and rook
+          if (this._boardModel[row][1] == null && this._boardModel[row][2] == null &&
+              this._boardModel[row][3] == null){
             return true;
           } else {
             return false
@@ -129,11 +130,11 @@ export default class GameCtrl {
         // We clicked on figure
         if (this._markedFigure._side == boardElement._side) {
           // and it is our figure
-          // TODO: should check for castling here
+          //castling is available
           if (this._checkCastling(boardElement)) {
             this._performCastling(boardElement);
           } else {
-            // Castling isn't avaible
+            // Castling isn't available
             // so we cant mark new figure
             this._clearState();
             this._handleMark(boardElement);
