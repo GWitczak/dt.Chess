@@ -1,4 +1,5 @@
 import Piece from "./piece";
+import PawnPromotion from "./pawnPromotion";
 
 class Pawn extends Piece {
   constructor(x, y, side) {
@@ -29,11 +30,11 @@ class Pawn extends Piece {
     // return only attacks on enemy pieces
     return attacks.filter((move) =>
       board[move[0]][move[1]] != undefined &&
-      (board[move[0]][move[1]])._side != this.side);
+      (board[move[0]][move[1]])._side != this._side);
   }
 
   findLegalMoves(board) {
-    console.log(board);
+    //console.log(board);
     const x = this._x; // row
     const y = this._y; // column
     const v = this._vector // up/down
@@ -54,6 +55,13 @@ class Pawn extends Piece {
     return Pawn.filterOccupiedPossition(Pawn.filterOutBoardMoves(result), board).concat(this.findLegalAttacks(board));
   }
 
+  // pawn promotion
+  movePiece(newPosition, board) {
+    super.movePiece(newPosition, board);
+    if ( (this._side == "white" && this._x == 0) || (this._side == "black" && this._x == 7) ) {
+      new PawnPromotion(this._x, this._y, this._side, board)
+    }
+  }
 }
 
 export default Pawn;

@@ -181,8 +181,6 @@ export default class GameCtrl {
         this._clearState();
         break;
     }
-
-    // boardElement ? this._getMoves(boardElement) : null; 
   }
 
   _getMoves(figure) {
@@ -202,7 +200,6 @@ export default class GameCtrl {
   init() {
     console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
 
-    this._whoseTurn = "white";
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
