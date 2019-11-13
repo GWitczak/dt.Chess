@@ -4,6 +4,7 @@ export default class GameCtrl {
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
     this._markedFigure = null;
+    this._whoseTurn = 'white';
   }
 
   _setListeners() {
@@ -25,7 +26,7 @@ export default class GameCtrl {
   _handleMark(boardElement) {
     // Set new piece as marked
     this._markedFigure = boardElement;
-    if (this._markedFigure._side === this._whoseTurn){
+    if (this._markedFigure._side === this._whoseTurn) {
       console.log('Marked: ' + boardElement.name);
       this._displayMoves(boardElement);
     }
@@ -36,7 +37,7 @@ export default class GameCtrl {
       this._handleMove(enemyPossition); //wywołanie this._handleMove zmienia kolejkę
       console.log('Attack possition: ' + enemyPossition[0] + ',' + enemyPossition[1]);
     } else {
-      console.log('Damn! '+ this._markedFigure.name +' can not attack: ' + enemyPossition[0] + ',' + enemyPossition[1]);
+      console.log('Damn! ' + this._markedFigure.name + ' can not attack: ' + enemyPossition[0] + ',' + enemyPossition[1]);
       this._clearState();
     }
   }
@@ -49,10 +50,10 @@ export default class GameCtrl {
     // update board view
     this._boardView.movePiece(startPossition, this._markedFigure);
     console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition[0] + ', ' + newPossition[1]);
-    
+
     this._switchTurn();
     console.log(`${this._whoseTurn}'s turn!`);
-    
+
     this._clearState();
   }
 
@@ -97,7 +98,7 @@ export default class GameCtrl {
       case (this._markedFigure != null &&
         boardElement != null &&
         this._markedFigure._side == boardElement._side):
-        console.log('Marking new figure...');
+        console.log('Marking new figure...2');
 
         this._clearState();
         this._handleMark(boardElement);
@@ -122,8 +123,8 @@ export default class GameCtrl {
         /* Mark figure */
       case (this._markedFigure == null &&
         boardElement != null &&
-        true /* Check here if it is our figure*/ ):
-        console.log('Marking new figure...');
+        true && this._whoseTurn === boardElement._side /* Check here if it is our figure*/ ):
+        console.log('Marking new figure...2');
         this._handleMark(boardElement);
         break;
 
