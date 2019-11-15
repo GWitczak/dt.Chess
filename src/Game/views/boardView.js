@@ -10,7 +10,7 @@ export default class BoardView {
                 square.dataset.id = `${x}-${y}`;
                 square.dataset.x = `${x}`;
                 square.dataset.y = `${y}`;
-                square.innerHTML = `${x}, ${y}`; // by lepiej widzieć indeksy
+                // square.innerHTML = `${x}, ${y}`; // by lepiej widzieć indeksy
                 square.className += x % 2 == y % 2 ? "light" : "dark";
                 square.classList.add("square");
                 this._boardElement.appendChild(square);
@@ -32,8 +32,8 @@ export default class BoardView {
     movePiece(positionStart, figure) {
         // Reset old possition
         this._boardElement.querySelector(
-            `[data-id="${positionStart[0]}-${positionStart[1]}"]`
-        ).innerHTML = `${positionStart[0]}, ${positionStart[1]}`;
+            `[data-id="${positionStart[0]}-${positionStart[1]}"]`).innerHTML = '';
+            // `[data-id="${positionStart[0]}-${positionStart[1]}"]`).innerHTML = `${positionStart[0]}, ${positionStart[1]}`;
         // Set piece on new possition
         const x = figure._x;
         const y = figure._y;

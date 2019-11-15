@@ -9,6 +9,6 @@ export default class Game {
     }
 
     init() {
-        this._gameCtrl.init();
+        this._gameCtrl.setting();
     }
 }
