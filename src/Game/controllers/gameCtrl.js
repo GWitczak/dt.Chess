@@ -168,8 +168,13 @@ export default class GameCtrl {
       case (this._markedFigure != null &&
         boardElement != null &&
         this._markedFigure._side != boardElement._side):
-        console.log('Attacking...');
-        this._handleAttack([x, y]);
+        if (this._boardModel[x][y].name != 'king') {
+          console.log('Attacking...');
+          this._handleAttack([x, y]);
+        } else {
+          console.log("You can't attack the king!");
+        }
+        
         break;
 
         /* Moving */
@@ -208,7 +213,10 @@ export default class GameCtrl {
       if (!this._boardModel[position[0]][position[1]]) {
         document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("highlighted");
       } else {
-        document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("attacks");
+        if (this._boardModel[position[0]][position[1]].name !== 'king') {
+          document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("attacks");
+        }
+        
       }
       
     }
