@@ -1,16 +1,16 @@
 :root {
-    --white: rgb(255, 255, 255);
-    --black: rgb(0, 0, 0);
-    --highlighted: rgba(255, 255, 0, 0.5);
-    --marked: rgba(255, 208, 0, 0.5);
+    --white: rgb(233, 233, 233);
+    --black: rgb(26, 26, 26);
+    --highlighted: rgba(255, 255, 0, 1);
+    --marked: rgba(255, 208, 0, 1);
     --attacks: rgba(200, 100, 100, 0.966);
     --white-figures: rgba(255, 255, 255);
     --black-figures: rgb(0, 0, 0);
-    --pawn-promotion-div: rgb(146, 109, 78);
+    --pawn-promotion-div: rgb(129, 129, 129);
 }
 
 body {
-    background-image: url("bg.jpg");
+    background-image: url("bg1.jpg");
     background-repeat: repeat;
     background-size: cover;
     background-position: center;

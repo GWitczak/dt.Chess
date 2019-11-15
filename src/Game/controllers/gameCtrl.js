@@ -10,6 +10,7 @@ export default class GameCtrl {
 
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
+      if (!ev.target.closest(".square")) return;
       const squarePosition = ev.target
         .closest(".square")
         .dataset.id.split("-")
@@ -218,7 +219,7 @@ export default class GameCtrl {
     var styleForm = document.createElement("div");
     styleForm.id = "style-form";
     styleForm.className="form"
-    const text1 = document.createTextNode("Choose style:");
+    const text1 = document.createTextNode("Style:  ");
     const styleText = document.createElement("p");
     styleText.appendChild(text1);
     styleForm.appendChild(styleText);
@@ -234,12 +235,12 @@ export default class GameCtrl {
         style.appendChild(option);
     }
 
-    var times = [2,3,5];
-    var times2 = ["2 minutes", "3 minutes", "5 minutes"]
+    var times = [2,3,4,5];
+    var times2 = ["2 minutes", "3 minutes", "4 minutes", "5 minutes"]
     var timeForm = document.createElement("div");
     timeForm.id = "time-form";
     timeForm.className="form"
-    const text2 = document.createTextNode("Choose time:");
+    const text2 = document.createTextNode("Round time:  ");
     const timeText = document.createElement("p");
     timeText.appendChild(text2);
     timeForm.appendChild(timeText);
@@ -259,7 +260,7 @@ export default class GameCtrl {
     var firstForm = document.createElement("div");
     firstForm.id = "first-form";
     firstForm.className="form"
-    const text3 = document.createTextNode("Choose first:");
+    const text3 = document.createTextNode("First move:  ");
     const firstText = document.createElement("p");
     firstText.appendChild(text3);
     firstForm.appendChild(firstText);
@@ -279,7 +280,7 @@ export default class GameCtrl {
     button.setAttribute("type", "submit");
     button.value="New game";
     settingsDiv.appendChild(button);
-    document.querySelector(".board").appendChild(settingsDiv);
+    document.querySelector(".container").appendChild(settingsDiv);
 
     let _this = this;
 
@@ -292,8 +293,8 @@ export default class GameCtrl {
     button.addEventListener("click", ()=>{
         _this._whoseTurn=document.getElementById("first-select").value;
         _this._timer=document.getElementById("time-select").value;
-        document.querySelector(".board").removeChild(settingsDiv);
-        _this.init() // tutaj się psuje
+        document.querySelector(".container").removeChild(settingsDiv);
+        _this.init()
     });
   }
 

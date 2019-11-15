@@ -1,12 +1,12 @@
 :root {
     --white: rgb(62, 223, 88);
     --black: rgb(42, 67, 180);
-    --highlighted: rgba(255, 255, 0, 0.5);
-    --marked: rgba(255, 208, 0, 0.5);
+    --highlighted: rgba(255, 255, 0, 1);
+    --marked: rgba(255, 208, 0, 1);
     --attacks: rgba(200, 100, 100, 0.966);
     --white-figures: rgba(255, 255, 255);
     --black-figures: rgb(0, 0, 0);
-    --pawn-promotion-div: rgb(146, 109, 78);
+    --pawn-promotion-div: rgb(255, 148, 27);
 }
 
 body {
