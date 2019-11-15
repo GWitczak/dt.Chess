@@ -31,6 +31,7 @@ export default class GameCtrl {
     if (this._markedFigure._side === this._whoseTurn) {
       console.log('Marked: ' + boardElement.name);
       this._displayMoves(boardElement);
+      this._markFigure(boardElement);
     }
   }
 
@@ -67,6 +68,17 @@ export default class GameCtrl {
     for (let i = 0; i < highlighted.length; i++) {
       highlighted[i].classList.remove("highlighted");
     }
+    
+    let attacks = document.querySelectorAll(".attacks")
+    for (let i = 0; i < attacks.length; i++) {
+      attacks[i].classList.remove("attacks");
+    }
+
+    let marked = document.querySelectorAll(".marked")
+    for (let i = 0; i < marked.length; i++) {
+      marked[i].classList.remove("marked");
+    }
+
     console.log('Clear state!');
   }
 
@@ -158,8 +170,13 @@ export default class GameCtrl {
       case (this._markedFigure != null &&
         boardElement != null &&
         this._markedFigure._side != boardElement._side):
-        console.log('Attacking...');
-        this._handleAttack([x, y]);
+        if (this._boardModel[x][y].name != 'king') {
+          console.log('Attacking...');
+          this._handleAttack([x, y]);
+        } else {
+          console.log("You can't attack the king!");
+        }
+        
         break;
 
         /* Moving */
@@ -195,7 +212,15 @@ export default class GameCtrl {
     const moves = this._getMoves(figure);
     for (let i = 0; i < moves.length; i++) {
       let position = moves[i];
-      document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("highlighted");
+      if (!this._boardModel[position[0]][position[1]]) {
+        document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("highlighted");
+      } else {
+        if (this._boardModel[position[0]][position[1]].name !== 'king') {
+          document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("attacks");
+        }
+        
+      }
+      
     }
   }
 
@@ -296,6 +321,12 @@ export default class GameCtrl {
         document.querySelector(".container").removeChild(settingsDiv);
         _this.init()
     });
+  }
+
+  _markFigure(figure) {
+    let x = figure._x;
+    let y = figure._y;
+    document.querySelector(`[data-id="${x}-${y}"]`).classList.add("marked");
   }
 
   init() {
