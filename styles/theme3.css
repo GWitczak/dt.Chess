@@ -1,0 +1,41 @@
+:root {
+    --white: rgb(62, 223, 88);
+    --black: rgb(42, 67, 180);
+    --highlighted: rgba(255, 255, 0, 1);
+    --marked: rgba(255, 208, 0, 1);
+    --attacks: rgba(200, 100, 100, 0.966);
+    --white-figures: rgba(255, 255, 255);
+    --black-figures: rgb(0, 0, 0);
+    --pawn-promotion-div: rgb(255, 148, 27);
+}
+
+body {
+    background: linear-gradient(45deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 2800vh 2800vh;
+    -webkit-animation: rainbow 60s ease infinite;
+    -z-animation: rainbow 60s ease infinite;
+    -o-animation: rainbow 60s ease infinite;
+    animation: rainbow 60s ease infinite;
+    height: 100vh;
+}
+
+@-webkit-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-moz-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-o-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes rainbow { 
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}

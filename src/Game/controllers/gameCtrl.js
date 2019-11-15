@@ -5,10 +5,12 @@ export default class GameCtrl {
     this._boardView = new BoardView(this._boardContainer);
     this._markedFigure = null;
     this._whoseTurn = 'white';
+    this._timer = 2;
   }
 
   _setListeners() {
     this._boardContainer.addEventListener("click", ev => {
+      if (!ev.target.closest(".square")) return;
       const squarePosition = ev.target
         .closest(".square")
         .dataset.id.split("-")
@@ -222,12 +224,110 @@ export default class GameCtrl {
     }
   }
 
+  setting() {
+    const settingsDiv = document.createElement("div");
+    settingsDiv.className = "settings-div";
+
+    const text01 = document.createTextNode("Welcome to Chess,");
+    const text02 = document.createTextNode("made for CodersCamp");
+    const settingsText01 = document.createElement("p");
+    const settingsText02 = document.createElement("p");
+    settingsText01.className = "settings-text";
+    settingsText02.className = "settings-text";
+    settingsText01.appendChild(text01);
+    settingsText02.appendChild(text02);
+    settingsDiv.appendChild(settingsText01);
+    settingsDiv.appendChild(settingsText02);
+
+    var styles = ["Default","Retro", "Rainbow", "Hello Kitty"];
+    var styles2 = [1,2,3,4]
+    var styleForm = document.createElement("div");
+    styleForm.id = "style-form";
+    styleForm.className="form"
+    const text1 = document.createTextNode("Style:  ");
+    const styleText = document.createElement("p");
+    styleText.appendChild(text1);
+    styleForm.appendChild(styleText);
+    var style = document.createElement("select");
+    style.id = "style-select";
+    settingsDiv.appendChild(styleForm);
+    styleForm.appendChild(style);
+
+    for (var i = 0; i < styles.length; i++) {
+        var option = document.createElement("option");
+        option.value = styles2[i];
+        option.text = styles[i];
+        style.appendChild(option);
+    }
+
+    var times = [2,3,4,5];
+    var times2 = ["2 minutes", "3 minutes", "4 minutes", "5 minutes"]
+    var timeForm = document.createElement("div");
+    timeForm.id = "time-form";
+    timeForm.className="form"
+    const text2 = document.createTextNode("Round time:  ");
+    const timeText = document.createElement("p");
+    timeText.appendChild(text2);
+    timeForm.appendChild(timeText);
+    var time = document.createElement("select");
+    time.id = "time-select";
+    settingsDiv.appendChild(timeForm);
+    timeForm.appendChild(time);
+
+    for (var i = 0; i < times.length; i++) {
+        var option = document.createElement("option");
+        option.value = times[i];
+        option.text = times2[i];
+        time.appendChild(option);
+    }
+
+    var color = ["white", "black"]
+    var firstForm = document.createElement("div");
+    firstForm.id = "first-form";
+    firstForm.className="form"
+    const text3 = document.createTextNode("First move:  ");
+    const firstText = document.createElement("p");
+    firstText.appendChild(text3);
+    firstForm.appendChild(firstText);
+    var first = document.createElement("select");
+    first.id = "first-select";
+    settingsDiv.appendChild(firstForm);
+    firstForm.appendChild(first);
+
+    for (var i = 0; i < color.length; i++) {
+        var option = document.createElement("option");
+        option.value = color[i];
+        option.text = color[i];
+        first.appendChild(option);
+    }
+
+    const button = document.createElement("input");
+    button.setAttribute("type", "submit");
+    button.value="New game";
+    settingsDiv.appendChild(button);
+    document.querySelector(".container").appendChild(settingsDiv);
+
+    let _this = this;
+
+    let theme = document.querySelector("link[href^='styles/theme']");
+
+    style.addEventListener("change", ()=>{
+        theme.href = "styles/theme"+document.getElementById("style-select").value+".css";
+    })
+    
+    button.addEventListener("click", ()=>{
+        _this._whoseTurn=document.getElementById("first-select").value;
+        _this._timer=document.getElementById("time-select").value;
+        document.querySelector(".container").removeChild(settingsDiv);
+        _this.init()
+    });
+  }
+
   _markFigure(figure) {
     let x = figure._x;
     let y = figure._y;
     document.querySelector(`[data-id="${x}-${y}"]`).classList.add("marked");
   }
-
 
   init() {
     console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
