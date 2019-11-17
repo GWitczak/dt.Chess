@@ -12,32 +12,58 @@ class King extends Piece {
   filterOutBoardMoves(possibleMoves) {
     let allowedMoves = JSON.parse(JSON.stringify(possibleMoves));
     allowedMoves = allowedMoves.filter(move => {
-      return (move[0] >=0 && move[0] <= 7 && move[1] >=0 && move[1] <= 7)
+      return (move[0] >= 0 && move[0] <= 7 && move[1] >= 0 && move[1] <= 7)
     })
     return allowedMoves;
   }
 
   filterObstacles(possibleMoves, board) {
     let allowedMoves = JSON.parse(JSON.stringify(possibleMoves)); // deep copy
-      for (let i = 0; i < possibleMoves.length; i++) {
-        let xPos = possibleMoves[i][0];
-        let yPos = possibleMoves[i][1];
+    for (let i = 0; i < possibleMoves.length; i++) {
+      let xPos = possibleMoves[i][0];
+      let yPos = possibleMoves[i][1];
 
-        if (board[xPos][yPos]) {
-          if (board[xPos][yPos]._side === this._side) {
-            allowedMoves = allowedMoves.filter(move => {
-              return !(move[0] === board[xPos][yPos]._x && move[1] === board[xPos][yPos]._y);
-            })
-          }
+      if (board[xPos][yPos]) {
+        if (board[xPos][yPos]._side === this._side) {
+          allowedMoves = allowedMoves.filter(move => {
+            return !(move[0] === board[xPos][yPos]._x && move[1] === board[xPos][yPos]._y);
+          })
         }
       }
-      return allowedMoves;
+    }
+    return allowedMoves;
+  }
+
+  _filterMovesFromOpponentAttacks(moves, opponentAttacks) {
+    return moves.filter((move) => {
+      for (let i = 0; i < opponentAttacks.length; i++) {
+        if (move[0] == opponentAttacks[i][0] && move[1] == opponentAttacks[i][1])
+        return false;
+      }
+      return true;
+    });
+  }
+
+  _findOpponentAttacks(board) {
+    let attacks = [];
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        let figure = board[row][col] || null;
+        if (figure != null && figure._side != this._side) {
+          let legalAttacks = figure.name == "pawn" ?
+            [[figure._x + figure._vector, figure._y + 1], [figure._x + figure._vector, figure._y - 1]] 
+            : figure.findLegalMoves(board, false);
+          for (let i = 0; i < legalAttacks.length; i++)
+            attacks.push(legalAttacks[i]);
+        }
+      }
+    }
+    return attacks;
   }
 
   // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
-  findLegalMoves(board) {
+  findLegalMoves(board, doFilter = true) {
     //console.log(board);
-
     // Król może poruszać się o 1 w dowolną ze stron na w linii prostej oraz po skosie
 
     const x = this._x; // row
@@ -64,7 +90,9 @@ class King extends Piece {
 
     boardMoves = this.filterOutBoardMoves(allMoves);
     legalMoves = this.filterObstacles(boardMoves, board);
-
+    if (doFilter) {
+      legalMoves = this._filterMovesFromOpponentAttacks(legalMoves, this._findOpponentAttacks(board));
+    }
     return legalMoves;
   }
 
