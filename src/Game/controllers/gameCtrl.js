@@ -6,6 +6,8 @@ export default class GameCtrl {
     this._markedFigure = null;
     this._whoseTurn = 'white';
     this._timer = 2;
+    this._WhiteKing;
+    this._BlackKing;
   }
 
   _setListeners() {
@@ -46,6 +48,10 @@ export default class GameCtrl {
   }
 
   _handleMove(newPossition) {
+    
+    this._WhiteKing.isCheck(this._boardModel);
+    this._BlackKing.isCheck(this._boardModel);
+
     // start possition
     let startPossition = [this._markedFigure._x, this._markedFigure._y];
     // update board model 
@@ -56,6 +62,7 @@ export default class GameCtrl {
 
     this._switchTurn();
     console.log(`${this._whoseTurn}'s turn!`);
+
 
     this._clearState();
   }
@@ -335,6 +342,8 @@ export default class GameCtrl {
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
+    this._WhiteKing = this._boardModel[7][4];
+    this._BlackKing = this._boardModel[0][4];
 
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }

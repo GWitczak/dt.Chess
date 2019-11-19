@@ -8,6 +8,16 @@ class King extends Piece {
     this._vector = this._side == "white" ? -1 : 1; // 1 to góra -1 to dół
   }
 
+  isCheck(board) {
+    const attacks = this._findOpponentAttacks(board);
+    for (let i =0; i < attacks.length; i++){
+      if(attacks[i][0] == this._x && attacks[i][1] == this._y)
+        console.log(`${this._side} king is checked!`);
+        return true;
+    }
+    return false;
+  }
+
   // Filtrowanie ruchów wykraczających poza szachownice
   filterOutBoardMoves(possibleMoves) {
     let allowedMoves = JSON.parse(JSON.stringify(possibleMoves));
