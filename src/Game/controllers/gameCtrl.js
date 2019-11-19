@@ -1,11 +1,15 @@
 export default class GameCtrl {
-  constructor(BoardView, BoardModel, boardContainerId) {
+  constructor(BoardView, BoardModel, boardContainerId, TimerView, timerViewID) {
     this._boardContainer = document.querySelector(`#${boardContainerId}`);
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
+    this._timerContainer = document.querySelector(`#${timerViewID}`);
+    this._timerView = new TimerView(this._timerContainer);
     this._markedFigure = null;
     this._whoseTurn = 'white';
     this._timer = 2;
+    this._timeLeftWhitePlayer = null;
+    this._timeLeftBlackPlayer = null;
   }
 
   _setListeners() {
@@ -21,8 +25,53 @@ export default class GameCtrl {
     });
   }
 
+  endGame(winner){
+    const endGameBox = document.createElement("div");
+    endGameBox.className = "endGameBox";
+
+    const text = document.createElement('p');
+    text.innerHTML = `Gameover!<br>The winner is ${winner} player.`;
+    endGameBox.appendChild(text);
+
+    const button = document.createElement("input");
+    button.setAttribute("type", "submit");
+    button.value="Start over";
+    endGameBox.appendChild(button);
+
+    const endGameBoxCover = document.createElement("div");
+    endGameBoxCover.className = "endGameBoxCover";
+
+    document.querySelector(".container").appendChild(endGameBoxCover);
+    document.querySelector(".container").appendChild(endGameBox);
+    
+    button.addEventListener("click", ()=>{
+      document.querySelector(".container").removeChild(endGameBoxCover);
+      document.querySelector(".container").removeChild(endGameBox);
+      window.location.reload(); // TODO: znaleźć sposób jak wykasować ruchy z poprzedniej tury i nie odświeżać strony
+    });
+  }
+
+  _setTimers(time){
+    this._timeLeftWhitePlayer = time*60*1000;
+    this._timeLeftBlackPlayer = time*60*1000;
+  }
+
+  _runTime(color, onClickTime){
+    color === "white" ? this._timeLeftWhitePlayer+=onClickTime : this._timeLeftBlackPlayer+=onClickTime;
+  }
+  _stopTime(color, onClickTime){
+    color === "white" ? this._timeLeftWhitePlayer-=onClickTime : this._timeLeftBlackPlayer-=onClickTime;
+    //jeśli timer zejdzie do zera, ustaw przeciwnika jako zwycięzce i  wywołaj funkcję endgame()
+    if (this._timeLeftBlackPlayer <= 0 || this._timeLeftWhitePlayer <= 0){
+      this.endGame(this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white");
+    }
+    this._timerView.update(this._timeLeftWhitePlayer,this._timeLeftBlackPlayer);
+  }
+  
   _switchTurn() {
+    this._stopTime(this._whoseTurn, new Date().getTime());
     this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white";
+    this._runTime(this._whoseTurn, new Date().getTime());
   }
 
   _handleMark(boardElement) {
@@ -53,9 +102,8 @@ export default class GameCtrl {
     // update board view
     this._boardView.movePiece(startPossition, this._markedFigure);
     console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition[0] + ', ' + newPossition[1]);
-
     this._switchTurn();
-    console.log(`${this._whoseTurn}'s turn!`);
+    console.log(`${this._whoseTurn} player's turn!`);
 
     this._clearState();
   }
@@ -330,12 +378,16 @@ export default class GameCtrl {
   }
 
   init() {
-    console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
+    console.log(`Inicjalizacja controllera...\n${this._whoseTurn} player starts.`);
+    
+    this._setTimers(this._timer);
 
+    this._timerView.init(this._timeLeftWhitePlayer,this._timeLeftBlackPlayer);
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
 
+    this._runTime(this._whoseTurn, new Date().getTime());
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }
 }
