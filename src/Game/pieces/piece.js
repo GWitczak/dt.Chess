@@ -6,6 +6,7 @@ class Piece {
     this._y = y;
     this._pristine = true;
     this._side = side; // 'black' or 'white'
+    this.locked =false;
   }
 
   get pristine() {
@@ -22,6 +23,18 @@ class Piece {
     //New possition for figure
     this._x = newPosition[0];
     this._y = newPosition[1];
+  }
+
+  lock(){
+    this.locked = true;
+  }
+
+  unlock(){
+    this.locked = false;
+  }
+
+  findLegalMoves(){
+    if (this.locked === true) return [];
   }
 }
 

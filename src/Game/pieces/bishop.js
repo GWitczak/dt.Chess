@@ -63,7 +63,7 @@ class Bishop extends Piece {
     // Główna metoda, w której trzeba zapisać wszystkie możliwe ruchy danej bierki
     findLegalMoves(board) {
       //console.log(board);
-  
+      super();
       // Goniec może poruszać się o dowolną ilośc pól na skos w każdą stronę do napotkania na przeszkodę (koniec szachownicy / bierka tego samego koloru - wtedy zatrzymuje się przed nią, bierka innego koloru - może bić, czyli może stanąć na tym samym miejscu co dana bierka)
       const x = this._x; // row
       const y = this._y; // column
