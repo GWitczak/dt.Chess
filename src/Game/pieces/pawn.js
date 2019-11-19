@@ -21,7 +21,7 @@ class Pawn extends Piece {
 
   findLegalAttacks(board) {
     //attacks of pawn
-    super();
+    super.findLegalMoves();
     let attacks = [
       [this._x + this._vector, this._y + 1],
       [this._x + this._vector, this._y - 1]

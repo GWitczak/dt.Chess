@@ -38,7 +38,7 @@ class Knight extends Piece {
 
   findLegalMoves(board) {
     //console.log(board);
-    super();
+    super.findLegalMoves();
     const x = this._x; // row
     const y = this._y; // column
 
