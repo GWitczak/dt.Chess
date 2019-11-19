@@ -49,8 +49,7 @@ export default class GameCtrl {
 
   _handleMove(newPossition) {
     
-    this._WhiteKing.isCheck(this._boardModel);
-    this._BlackKing.isCheck(this._boardModel);
+    
 
     // start possition
     let startPossition = [this._markedFigure._x, this._markedFigure._y];
@@ -63,6 +62,8 @@ export default class GameCtrl {
     this._switchTurn();
     console.log(`${this._whoseTurn}'s turn!`);
 
+    this._WhiteKing.isCheck(this._boardModel);
+    this._BlackKing.isCheck(this._boardModel);
 
     this._clearState();
   }

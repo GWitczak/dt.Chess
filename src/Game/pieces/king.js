@@ -10,10 +10,11 @@ class King extends Piece {
 
   isCheck(board) {
     const attacks = this._findOpponentAttacks(board);
-    for (let i =0; i < attacks.length; i++){
-      if(attacks[i][0] == this._x && attacks[i][1] == this._y)
+    for (let i = 0; i < attacks.length; i++) {
+      if (attacks[i][0] == this._x && attacks[i][1] == this._y) {
         console.log(`${this._side} king is checked!`);
         return true;
+      }
     }
     return false;
   }
@@ -48,7 +49,7 @@ class King extends Piece {
     return moves.filter((move) => {
       for (let i = 0; i < opponentAttacks.length; i++) {
         if (move[0] == opponentAttacks[i][0] && move[1] == opponentAttacks[i][1])
-        return false;
+          return false;
       }
       return true;
     });
@@ -60,9 +61,11 @@ class King extends Piece {
       for (let col = 0; col < 8; col++) {
         let figure = board[row][col] || null;
         if (figure != null && figure._side != this._side) {
-          let legalAttacks = figure.name == "pawn" ?
-            [[figure._x + figure._vector, figure._y + 1], [figure._x + figure._vector, figure._y - 1]] 
-            : figure.findLegalMoves(board, false);
+          let legalAttacks = figure.name == "pawn" ? [
+              [figure._x + figure._vector, figure._y + 1],
+              [figure._x + figure._vector, figure._y - 1]
+            ] :
+            figure.findLegalMoves(board, false);
           for (let i = 0; i < legalAttacks.length; i++)
             attacks.push(legalAttacks[i]);
         }
