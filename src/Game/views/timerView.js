@@ -3,13 +3,13 @@ export default class timerView {
         this._timerElement = timerContainer;
     }
 
-    _formatTime(timeInMiliSeconds) {
-        let minutes = Math.floor(timeInMiliSeconds / 1000 / 60);
-        let seconds = Math.floor((timeInMiliSeconds / 1000) % 60);
+    _formatTime(timeInSeconds) {
+        let minutes = Math.floor(timeInSeconds / 60);
+        let seconds = Math.floor(timeInSeconds % 60);
         let time;
-        if (timeInMiliSeconds < 0)
+        if (timeInSeconds < 0)
             time = "time exceeded!";
-        else if (timeInMiliSeconds > 0 && minutes <= 0 && seconds <= 0)
+        else if (timeInSeconds > 0 && minutes <= 0 && seconds <= 0)
             time = "less than 1s";
         else
             seconds >= 10 ? time = `0${minutes}:${seconds}` : time = `0${minutes}:0${seconds}`;
@@ -50,8 +50,7 @@ export default class timerView {
         this._createTimerBox(timeLeftWhitePlayer, timeLeftBlackPlayer);
     }
 
-    update(timeLeftWhitePlayer, timeLeftBlackPlayer) {
-        document.getElementsByClassName('timerWhitePlayer')[0].lastChild.innerHTML = this._formatTime(timeLeftWhitePlayer);
-        document.getElementsByClassName('timerBlackPlayer')[0].lastChild.innerHTML = this._formatTime(timeLeftBlackPlayer);
+    update(side, timeLeft) {
+        document.getElementById(`${side}PlayersTime`).innerHTML = this._formatTime(timeLeft);
     }
 }
