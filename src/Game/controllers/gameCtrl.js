@@ -10,10 +10,6 @@ export default class GameCtrl {
     this._timer = 2;
     this._timeLeftWhitePlayer = null;
     this._timeLeftBlackPlayer = null;
-
-    // test intervals
-    this._x = 100;
-    this._y = 100;
   }
 
   _setListeners() {
@@ -55,37 +51,39 @@ export default class GameCtrl {
     });
   }
 
-  _setTimers(time) {
-    this._timeLeftWhitePlayer = time * 60 * 1000;
-    this._timeLeftBlackPlayer = time * 60 * 1000;
+  _setTimers(time) { //czas zmieniamy na sekundy
+    this._timeLeftWhitePlayer = time * 60;
+    this._timeLeftBlackPlayer = time * 60;
   }
 
   _runTime() {
-    const onClickTime = new Date().getTime()
-
-    this._whoseTurn === "white" ? this._timeLeftWhitePlayer += onClickTime : this._timeLeftBlackPlayer += onClickTime;
-
     // przy inicie kontrollera odpalana jest ta funkcja a z niej pierwszy raz odpalamy jeden z timerów, później jest już odpalany z funkcji _switchTurn()
     this._setInterval(this._whoseTurn)
   }
 
   _setInterval(side) {
+    if (side==="white"){
+      document.querySelector(`.timerWhitePlayer`).classList.remove("inactivePlayer")
+      document.querySelector(`.timerBlackPlayer`).classList.add("inactivePlayer")
+    }
+    else{
+        document.querySelector(`.timerBlackPlayer`).classList.remove("inactivePlayer")
+        document.querySelector(`.timerWhitePlayer`).classList.add("inactivePlayer")
+    }
     // Odliczanie w konsoli dla koloru którego jest aktualna tura
     if (side === 'white') {
       this.whiteIntervalId = setInterval(() => {
-        // logika funkcji na potrzeby testów 
-        this._x--
-        console.log('White: ', this._x)
-        if (this._x < 0) {
+        this._timeLeftWhitePlayer--;
+        this._timerView.update(side, this._timeLeftWhitePlayer);
+        if (this._timeLeftWhitePlayer < 0) {
           this.endGame('black')
         };
       }, 1000)
     } else {
       this.blackIntervalId = setInterval(() => {
-        // logika na potrzeby testów 
-        this._y--
-        console.log('Black: ', this._y)
-        if (this._x < 0) {
+        this._timeLeftBlackPlayer--;
+        this._timerView.update(side, this._timeLeftBlackPlayer);
+        if (this._timeLeftBlackPlayer < 0) {
           this.endGame('white')
         }
       }, 1000)
@@ -99,26 +97,10 @@ export default class GameCtrl {
     clearInterval(this.blackIntervalId);
   }
 
-  _stopTime() {
-    const onClickTime = new Date().getTime();
-    this._whoseTurn === "white" ? this._timeLeftWhitePlayer -= onClickTime : this._timeLeftBlackPlayer -= onClickTime;
-    //jeśli timer zejdzie do zera, ustaw przeciwnika jako zwycięzce i  wywołaj funkcję endgame()
-    if (this._timeLeftBlackPlayer <= 0 || this._timeLeftWhitePlayer <= 0) {
-      this.endGame(this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white");
-    }
-    this._timerView.update(this._timeLeftWhitePlayer, this._timeLeftBlackPlayer);
-  }
-
   _switchTurn() {
     this._clearIntervals(); // zatrzymujemy odliczanie timerów
-
-    // this._stopTime();
     this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white";
-
     this._setInterval(this._whoseTurn); // odpalamy timera dla aktualnego koloru
-
-    // _runTime powinno być odpalone tylko raz przy inicie kontrollera
-    // this._runTime(this._whoseTurn, new Date().getTime());
   }
 
   _handleMark(boardElement) {
