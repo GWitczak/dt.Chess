@@ -5,9 +5,9 @@ export default class timerView {
 
     _formatTime(timeInSeconds) {
         let minutes = Math.floor(timeInSeconds / 60);
-        let seconds = Math.floor(timeInSeconds % 60);
+        let seconds = Math.ceil(timeInSeconds % 60);
         let time;
-        if (timeInSeconds < 0)
+        if (timeInSeconds == 0)
             time = "time exceeded!";
         else
             seconds >= 10 ? time = `0${minutes}:${seconds}` : time = `0${minutes}:0${seconds}`;

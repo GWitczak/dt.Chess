@@ -76,7 +76,7 @@ export default class GameCtrl {
       this.whiteIntervalId = setInterval(() => {
         this._timeLeftWhitePlayer--;
         this._timerView.update(side, this._timeLeftWhitePlayer);
-        if (this._timeLeftWhitePlayer < 0) {
+        if (this._timeLeftWhitePlayer == 0) {
           this.endGame('black')
         };
       }, 1000)
@@ -84,7 +84,7 @@ export default class GameCtrl {
       this.blackIntervalId = setInterval(() => {
         this._timeLeftBlackPlayer--;
         this._timerView.update(side, this._timeLeftBlackPlayer);
-        if (this._timeLeftBlackPlayer < 0) {
+        if (this._timeLeftBlackPlayer == 0) {
           this.endGame('white')
         }
       }, 1000)
