@@ -7,6 +7,8 @@
     --white-figures: rgba(255, 255, 255);
     --black-figures: rgb(0, 0, 0);
     --pawn-promotion-div: rgb(146, 109, 78);
+    --inactive-player-box: rgb(100,100,100);
+    --active-player-box: rgb(255,215,0);
 }
 
 body {

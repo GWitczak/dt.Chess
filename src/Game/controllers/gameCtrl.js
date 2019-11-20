@@ -1,11 +1,15 @@
 export default class GameCtrl {
-  constructor(BoardView, BoardModel, boardContainerId) {
+  constructor(BoardView, BoardModel, boardContainerId, TimerView, timerViewID) {
     this._boardContainer = document.querySelector(`#${boardContainerId}`);
     this._boardModel = new BoardModel();
     this._boardView = new BoardView(this._boardContainer);
+    this._timerContainer = document.querySelector(`#${timerViewID}`);
+    this._timerView = new TimerView(this._timerContainer);
     this._markedFigure = null;
     this._whoseTurn = 'white';
     this._timer = 2;
+    this._timeLeftWhitePlayer = null;
+    this._timeLeftBlackPlayer = null;
   }
 
   _setListeners() {
@@ -21,8 +25,82 @@ export default class GameCtrl {
     });
   }
 
+  endGame(winner) {
+    const endGameBox = document.createElement("div");
+    endGameBox.className = "endGameBox";
+
+    const text = document.createElement('p');
+    text.innerHTML = `Gameover!<br>The winner is ${winner} player.`;
+    endGameBox.appendChild(text);
+
+    const button = document.createElement("input");
+    button.setAttribute("type", "submit");
+    button.value = "Start over";
+    endGameBox.appendChild(button);
+
+    const endGameBoxCover = document.createElement("div");
+    endGameBoxCover.className = "endGameBoxCover";
+
+    document.querySelector(".container").appendChild(endGameBoxCover);
+    document.querySelector(".container").appendChild(endGameBox);
+
+    button.addEventListener("click", () => {
+      document.querySelector(".container").removeChild(endGameBoxCover);
+      document.querySelector(".container").removeChild(endGameBox);
+      window.location.reload(); // TODO: znaleźć sposób jak wykasować ruchy z poprzedniej tury i nie odświeżać strony
+    });
+  }
+
+  _setTimers(time) { //czas zmieniamy na sekundy
+    this._timeLeftWhitePlayer = time * 60;
+    this._timeLeftBlackPlayer = time * 60;
+  }
+
+  _runTime() {
+    // przy inicie kontrollera odpalana jest ta funkcja a z niej pierwszy raz odpalamy jeden z timerów, później jest już odpalany z funkcji _switchTurn()
+    this._setInterval(this._whoseTurn)
+  }
+
+  _setInterval(side) {
+    if (side==="white"){
+      document.querySelector(`.timerWhitePlayer`).classList.remove("inactivePlayer")
+      document.querySelector(`.timerBlackPlayer`).classList.add("inactivePlayer")
+    }
+    else{
+        document.querySelector(`.timerBlackPlayer`).classList.remove("inactivePlayer")
+        document.querySelector(`.timerWhitePlayer`).classList.add("inactivePlayer")
+    }
+    // Odliczanie w konsoli dla koloru którego jest aktualna tura
+    if (side === 'white') {
+      this.whiteIntervalId = setInterval(() => {
+        this._timeLeftWhitePlayer--;
+        this._timerView.update(side, this._timeLeftWhitePlayer);
+        if (this._timeLeftWhitePlayer < 0) {
+          this.endGame('black')
+        };
+      }, 1000)
+    } else {
+      this.blackIntervalId = setInterval(() => {
+        this._timeLeftBlackPlayer--;
+        this._timerView.update(side, this._timeLeftBlackPlayer);
+        if (this._timeLeftBlackPlayer < 0) {
+          this.endGame('white')
+        }
+      }, 1000)
+    }
+  }
+
+
+  // Zatrzymanie timerów
+  _clearIntervals() {
+    clearInterval(this.whiteIntervalId);
+    clearInterval(this.blackIntervalId);
+  }
+
   _switchTurn() {
+    this._clearIntervals(); // zatrzymujemy odliczanie timerów
     this._whoseTurn === "white" ? this._whoseTurn = "black" : this._whoseTurn = "white";
+    this._setInterval(this._whoseTurn); // odpalamy timera dla aktualnego koloru
   }
 
   _handleMark(boardElement) {
@@ -53,9 +131,8 @@ export default class GameCtrl {
     // update board view
     this._boardView.movePiece(startPossition, this._markedFigure);
     console.log('Moving ' + this._markedFigure.name + ' to ' + newPossition[0] + ', ' + newPossition[1]);
-
     this._switchTurn();
-    console.log(`${this._whoseTurn}'s turn!`);
+    console.log(`${this._whoseTurn} player's turn!`);
 
     this._clearState();
   }
@@ -68,7 +145,7 @@ export default class GameCtrl {
     for (let i = 0; i < highlighted.length; i++) {
       highlighted[i].classList.remove("highlighted");
     }
-    
+
     let attacks = document.querySelectorAll(".attacks")
     for (let i = 0; i < attacks.length; i++) {
       attacks[i].classList.remove("attacks");
@@ -93,13 +170,13 @@ export default class GameCtrl {
 
   _checkCastling(boardElement) {
     if (this._markedFigure.name == "rook" && boardElement.name == "king" ||
-        this._markedFigure.name == "king" && boardElement.name == "rook") {
+      this._markedFigure.name == "king" && boardElement.name == "rook") {
       if (this._markedFigure.pristine == true && boardElement.pristine == true) { // check if pieces were moved
         const rook = this._markedFigure.name == "rook" ? this._markedFigure : boardElement;
         let row = rook._x;
-        if (rook._y == 0){ // check if any pieces are between king and rook
+        if (rook._y == 0) { // check if any pieces are between king and rook
           if (this._boardModel[row][1] == null && this._boardModel[row][2] == null &&
-              this._boardModel[row][3] == null){
+            this._boardModel[row][3] == null) {
             return true;
           } else {
             return false
@@ -130,11 +207,11 @@ export default class GameCtrl {
       this._markedFigure = king;
       this._handleMove([row, 2]);
     } else {
-        this._clearState();
-        this._markedFigure = rook;
-        this._handleMove([row, 5]);
-        this._markedFigure = king;
-        this._handleMove([row, 6]);
+      this._clearState();
+      this._markedFigure = rook;
+      this._handleMove([row, 5]);
+      this._markedFigure = king;
+      this._handleMove([row, 6]);
     }
     this._switchTurn();
   }
@@ -176,7 +253,7 @@ export default class GameCtrl {
         } else {
           console.log("You can't attack the king!");
         }
-        
+
         break;
 
         /* Moving */
@@ -218,9 +295,9 @@ export default class GameCtrl {
         if (this._boardModel[position[0]][position[1]].name !== 'king') {
           document.querySelector(`[data-id="${position[0]}-${position[1]}"]`).classList.add("attacks");
         }
-        
+
       }
-      
+
     }
   }
 
@@ -239,11 +316,11 @@ export default class GameCtrl {
     settingsDiv.appendChild(settingsText01);
     settingsDiv.appendChild(settingsText02);
 
-    var styles = ["Default","Retro", "Rainbow", "Hello Kitty"];
-    var styles2 = [1,2,3,4]
+    var styles = ["Default", "Retro", "Rainbow", "Hello Kitty"];
+    var styles2 = [1, 2, 3, 4]
     var styleForm = document.createElement("div");
     styleForm.id = "style-form";
-    styleForm.className="form"
+    styleForm.className = "form"
     const text1 = document.createTextNode("Style:  ");
     const styleText = document.createElement("p");
     styleText.appendChild(text1);
@@ -254,17 +331,17 @@ export default class GameCtrl {
     styleForm.appendChild(style);
 
     for (var i = 0; i < styles.length; i++) {
-        var option = document.createElement("option");
-        option.value = styles2[i];
-        option.text = styles[i];
-        style.appendChild(option);
+      var option = document.createElement("option");
+      option.value = styles2[i];
+      option.text = styles[i];
+      style.appendChild(option);
     }
 
-    var times = [2,3,4,5];
+    var times = [2, 3, 4, 5];
     var times2 = ["2 minutes", "3 minutes", "4 minutes", "5 minutes"]
     var timeForm = document.createElement("div");
     timeForm.id = "time-form";
-    timeForm.className="form"
+    timeForm.className = "form"
     const text2 = document.createTextNode("Round time:  ");
     const timeText = document.createElement("p");
     timeText.appendChild(text2);
@@ -275,16 +352,16 @@ export default class GameCtrl {
     timeForm.appendChild(time);
 
     for (var i = 0; i < times.length; i++) {
-        var option = document.createElement("option");
-        option.value = times[i];
-        option.text = times2[i];
-        time.appendChild(option);
+      var option = document.createElement("option");
+      option.value = times[i];
+      option.text = times2[i];
+      time.appendChild(option);
     }
 
     var color = ["white", "black"]
     var firstForm = document.createElement("div");
     firstForm.id = "first-form";
-    firstForm.className="form"
+    firstForm.className = "form"
     const text3 = document.createTextNode("First move:  ");
     const firstText = document.createElement("p");
     firstText.appendChild(text3);
@@ -295,15 +372,15 @@ export default class GameCtrl {
     firstForm.appendChild(first);
 
     for (var i = 0; i < color.length; i++) {
-        var option = document.createElement("option");
-        option.value = color[i];
-        option.text = color[i];
-        first.appendChild(option);
+      var option = document.createElement("option");
+      option.value = color[i];
+      option.text = color[i];
+      first.appendChild(option);
     }
 
     const button = document.createElement("input");
     button.setAttribute("type", "submit");
-    button.value="New game";
+    button.value = "New game";
     settingsDiv.appendChild(button);
     document.querySelector(".container").appendChild(settingsDiv);
 
@@ -311,15 +388,15 @@ export default class GameCtrl {
 
     let theme = document.querySelector("link[href^='styles/theme']");
 
-    style.addEventListener("change", ()=>{
-        theme.href = "styles/theme"+document.getElementById("style-select").value+".css";
+    style.addEventListener("change", () => {
+      theme.href = "styles/theme" + document.getElementById("style-select").value + ".css";
     })
-    
-    button.addEventListener("click", ()=>{
-        _this._whoseTurn=document.getElementById("first-select").value;
-        _this._timer=document.getElementById("time-select").value;
-        document.querySelector(".container").removeChild(settingsDiv);
-        _this.init()
+
+    button.addEventListener("click", () => {
+      _this._whoseTurn = document.getElementById("first-select").value;
+      _this._timer = document.getElementById("time-select").value;
+      document.querySelector(".container").removeChild(settingsDiv);
+      _this.init()
     });
   }
 
@@ -330,12 +407,16 @@ export default class GameCtrl {
   }
 
   init() {
-    console.log("Inicjalizacja controllera...\nBiałe zaczynają.");
+    console.log(`Inicjalizacja controllera...\n${this._whoseTurn} player starts.`);
 
+    this._setTimers(this._timer);
+
+    this._timerView.init(this._timeLeftWhitePlayer, this._timeLeftBlackPlayer);
     this._boardModel.init();
     this._boardView.init(this._boardModel);
     this._setListeners();
 
+    this._runTime(); // zamiast brudzić tutaj możemy ten sam argument zapisać w funkcji, gdzie również jest dostępny (new Date().getTime())
     console.log(this._boardModel); // służy do podejrzenia tablicy w konsoli
   }
 }

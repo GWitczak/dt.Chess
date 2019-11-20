@@ -9,7 +9,7 @@ html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
+    height: 90vh;
     position: relative;
 }
 
@@ -77,7 +77,8 @@ html {
 }
 
 .pawn-promotion-cover,
-.settings-div {
+.settings-div,
+.endGameBoxCover {
     position: fixed;
     padding: 0;
     margin: 0;
@@ -90,11 +91,11 @@ html {
     min-height: 80vh;
 }
 
-.pawn-promotion-div {
+.pawn-promotion-div,
+.endGameBox {
     position: fixed;
     padding: 0;
     margin: 0;
-
     width: 60vh;
     height: 30vh;
     display: flex;
@@ -155,6 +156,50 @@ html {
     margin: 0 auto;
     margin-top: 5px;
 }
+.endGameBox > *{
+    text-align: center;
+}
+.endGameBox button {
+    flex: 1;
+}
+.timer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+
+.timerWhitePlayer, .timerBlackPlayer, .title{
+    width: 20vw;
+    max-width: 150px;
+    text-align: center;
+    margin-top: 5vh;
+}
+
+.timerWhitePlayer, .timerBlackPlayer{
+    background-color: var(--white);
+    border: 1px solid var(--active-player-box);
+    box-shadow: inset 0 0 3px var(--active-player-box);
+}
+
+.timerWhitePlayer>p, .timerBlackPlayer>p, p.title{
+    margin-bottom: 0;
+}
+
+.timerWhitePlayer>i, .timerBlackPlayer>i{
+    font-size: 6.5vh;
+}
+
+.inactivePlayer{
+    background-color: var(--pawn-promotion-div);
+    border: 2px solid var(--inactive-player-box);
+    box-shadow: inset 0 0 5px var(--inactive-player-box);
+}
+
+.inactivePlayer > *{
+    color: var(--inactive-player-box);
+    text-shadow: none;
+}
 
 @media (max-width: 720px) {
 
@@ -168,12 +213,14 @@ html {
     }
 
     .pawn-promotion-cover,
-    .settings-div {
+    .settings-div,
+    .endGameBoxCover {
         min-width: 70vh;
         min-height: 70vh;
     }
 
-    .pawn-promotion-div {
+    .pawn-promotion-div,
+    .endGameBox {
         width: 53vh;
         height: 26.5vh;
     }
@@ -195,12 +242,14 @@ html {
     }
 
     .pawn-promotion-cover,
-    .settings-div {
+    .settings-div,
+    .endGameBoxCover {
         min-width: 50vh;
         min-height: 50vh;
     }
 
-    .pawn-promotion-div {
+    .pawn-promotion-div,
+    .endGameBox {
         width: 38vh;
         height: 19vh;
     }
@@ -238,7 +287,8 @@ html {
     }
 
     .pawn-promotion-cover,
-    .settings-div {
+    .settings-div,
+    .endGameBoxCover {
         min-width: 40vh;
         min-height: 40vh;
     }
@@ -280,12 +330,14 @@ html {
     }
 
     .pawn-promotion-cover,
-    .settings-div {
+    .settings-div,
+    .endGameBoxCover {
         min-width: 35vh;
         min-height: 35vh;
     }
 
-    .pawn-promotion-div {
+    .pawn-promotion-div,
+    .endGameBox {
         width: 26vh;
         height: 13vh;
     }
@@ -327,12 +379,14 @@ html {
     }
 
     .pawn-promotion-cover,
-    .settings-div {
+    .settings-div,
+    .endGameBoxCover {
         min-width: 25vh;
         min-height: 25vh;
     }
 
-    .pawn-promotion-div {
+    .pawn-promotion-div,
+    .endGameBox {
         width: 18vh;
         height: 9vh;
     }
