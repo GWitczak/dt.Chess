@@ -9,8 +9,6 @@ export default class timerView {
         let time;
         if (timeInSeconds < 0)
             time = "time exceeded!";
-        else if (timeInSeconds > 0 && minutes <= 0 && seconds <= 0)
-            time = "less than 1s";
         else
             seconds >= 10 ? time = `0${minutes}:${seconds}` : time = `0${minutes}:0${seconds}`;
         return time;
