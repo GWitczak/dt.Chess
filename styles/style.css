@@ -179,7 +179,7 @@ html {
 .timerWhitePlayer, .timerBlackPlayer{
     background-color: var(--white);
     border: 1px solid var(--active-player-box);
-    box-shadow: inset 0 0 3px var(--active-player-box);
+    box-shadow: inset 0 0 5px var(--active-player-box);
 }
 
 .timerWhitePlayer>p, .timerBlackPlayer>p, p.title{
