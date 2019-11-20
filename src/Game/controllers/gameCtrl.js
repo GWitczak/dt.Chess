@@ -26,6 +26,7 @@ export default class GameCtrl {
   }
 
   endGame(winner) {
+    this._clearIntervals(); //bo zmienia tło na nieprzezroczyste
     const endGameBox = document.createElement("div");
     endGameBox.className = "endGameBox";
 
