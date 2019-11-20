@@ -2,8 +2,8 @@
     --white: rgb(233, 233, 233);
     --black: rgb(26, 26, 26);
     --highlighted: rgba(255, 255, 0, 1);
-    --marked: rgba(255, 208, 0, 1);
-    --attacks: rgba(200, 100, 100, 0.966);
+    --marked: rgb(255, 166, 0);
+    --attacks: rgba(212, 36, 36, 0.966);
     --white-figures: rgba(255, 255, 255);
     --black-figures: rgb(0, 0, 0);
     --pawn-promotion-div: rgb(129, 129, 129);
