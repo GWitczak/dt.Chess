@@ -3,20 +3,20 @@ export default class timerView {
         this._timerElement = timerContainer;
     }
 
-    _formatTime(timeInMiliSeconds){
-        let minutes = Math.floor(timeInMiliSeconds/1000/60);
-        let seconds = Math.floor((timeInMiliSeconds/1000) % 60);
+    _formatTime(timeInMiliSeconds) {
+        let minutes = Math.floor(timeInMiliSeconds / 1000 / 60);
+        let seconds = Math.floor((timeInMiliSeconds / 1000) % 60);
         let time;
-        if (timeInMiliSeconds <0)
+        if (timeInMiliSeconds < 0)
             time = "time exceeded!";
-        else if (timeInMiliSeconds > 0 && minutes <=0 && seconds <=0)
+        else if (timeInMiliSeconds > 0 && minutes <= 0 && seconds <= 0)
             time = "less than 1s";
         else
-            seconds>=10 ? time = `0${minutes}:${seconds}` : time = `0${minutes}:0${seconds}`;
+            seconds >= 10 ? time = `0${minutes}:${seconds}` : time = `0${minutes}:0${seconds}`;
         return time;
     }
 
-    _createTimerBox(timeLeftWhitePlayer,timeLeftBlackPlayer){
+    _createTimerBox(timeLeftWhitePlayer, timeLeftBlackPlayer) {
         const TimerWhitePlayer = document.createElement("div");
         TimerWhitePlayer.className = "timerWhitePlayer";
         const TimerBlackPlayer = document.createElement("div");
@@ -45,10 +45,12 @@ export default class timerView {
         TimerBlackPlayer.appendChild(blackPlayersText);
         TimerBlackPlayer.appendChild(blackPlayersTime);
     }
-    init(timeLeftWhitePlayer,timeLeftBlackPlayer){
-        this._createTimerBox(timeLeftWhitePlayer,timeLeftBlackPlayer);
+
+    init(timeLeftWhitePlayer, timeLeftBlackPlayer) {
+        this._createTimerBox(timeLeftWhitePlayer, timeLeftBlackPlayer);
     }
-    update(timeLeftWhitePlayer,timeLeftBlackPlayer){
+
+    update(timeLeftWhitePlayer, timeLeftBlackPlayer) {
         document.getElementsByClassName('timerWhitePlayer')[0].lastChild.innerHTML = this._formatTime(timeLeftWhitePlayer);
         document.getElementsByClassName('timerBlackPlayer')[0].lastChild.innerHTML = this._formatTime(timeLeftBlackPlayer);
     }
